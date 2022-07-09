@@ -17,7 +17,7 @@ from userge import userge, Message
 @userge.on_cmd(
     "xvideo", about={
         'header': "xvideo link direct",
-        'usage': "{tr}xvideo <url>"},
+        'usage': "{tr}xvideo url"},
     allow_channels=False
 )
 async def xvideo_direct(message: Message):
@@ -43,7 +43,7 @@ async def xvideo_direct(message: Message):
 @userge.on_cmd(
     "xsearch", about={
         'header': "search videos in xvideos",
-        'usage': "{tr}search <query>"},
+        'usage': "{tr}search query"},
     allow_channels=False
 )
 async def xvideo_search(message: Message):

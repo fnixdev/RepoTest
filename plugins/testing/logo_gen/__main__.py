@@ -1,5 +1,7 @@
 """ logo generator """
 
+from random import choice
+
 from pyrogram import enums
 
 from userge import userge, Message
@@ -12,7 +14,7 @@ from userge import userge, Message
     allow_channels=False, allow_via_bot=False
 )
 async def logo_gen(message: Message):
-    list = []
-    search = userge.search_messages("@UltroidLogos", filter=enums.MessagesFilter.PHOTO)
-    list.append(search)
-    await message.reply(list)
+    lists = []
+    async for search in userge.search_messages("@UltroidLogos", filter=enums.MessagesFilter.PHOTO):
+        lists.append(search.photo.file_id)
+    await message.reply_photo(choice(lists))

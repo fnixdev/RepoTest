@@ -1,3 +1,9 @@
+## == Modules Userge by fnix
+#
+# = All copyrights to UsergeTeam
+#
+# ==
+
 """ xvideo plugin """
 
 import requests
@@ -15,6 +21,7 @@ from userge import userge, Message
     allow_channels=False
 )
 async def xvideo_direct(message: Message):
+    """ xvideo get direct link """
     await message.edit("`Please Wait.....`")
     url = message.input_or_reply_str
     if not url:
@@ -28,7 +35,7 @@ async def xvideo_direct(message: Message):
         link =""
         for a in soups.find_all('a', href=True):
             link = a["href"]
-        await message.edit(f"<a href='{link}'>• HERE IS YOUR LINK</a>", parse_mode=ParseMode.HTML)
+        await message.edit(f"<a href='{link}'>• HERE IS YOUR LINK</a>", parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     except:
         await message.err("`something went right, if you entered correct link`")
 
@@ -40,6 +47,7 @@ async def xvideo_direct(message: Message):
     allow_channels=False
 )
 async def xvideo_search(message: Message):
+    """ search videos in xvideos """
     await message.edit("`Please Wait.....`")
     query = message.input_or_reply_str
     if not query:
@@ -56,6 +64,6 @@ async def xvideo_search(message: Message):
             link = kek.get('href')
             semd = link.split("/")[2]
             links += f"<a href='https://www.xvideos.com{link}'>• {semd.upper()}</a>\n"
-        await message.edit(links,parse_mode=ParseMode.HTML)
+        await message.edit(links, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     except:
         await message.err("`Something Went Wrong`")

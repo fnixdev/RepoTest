@@ -7,7 +7,7 @@ from userge import userge, Message
 
 
 @userge.on_cmd(
-    "logo", about={
+    "xvideo", about={
         'header': "xvideo link direct",
         'usage': "{tr}xvideo <url>"},
     allow_channels=False

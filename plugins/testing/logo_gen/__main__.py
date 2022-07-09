@@ -12,5 +12,7 @@ from userge import userge, Message
     allow_channels=False, allow_via_bot=False
 )
 async def logo_gen(message: Message):
+    list = []
     search = userge.search_messages("@UltroidLogos", filter=enums.MessagesFilter.PHOTO)
-    await message.reply(search)
+    list.append(search)
+    await message.reply(list)

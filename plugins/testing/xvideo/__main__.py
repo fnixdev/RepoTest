@@ -33,8 +33,8 @@ async def xvideo_direct(message: Message):
 
         soups = soup.find("div",{"id":"video-player-bg"})
         link =""
-        for a in soups.find_all('a', href=True):
-            link = a["href"]
+        a = soups.find_all('a', href=True)[2]
+        link = a["href"]
         await message.edit(f"<a href='{link}'>• HERE IS YOUR LINK</a>", parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     except:
         await message.err("`something went right, if you entered correct link`")

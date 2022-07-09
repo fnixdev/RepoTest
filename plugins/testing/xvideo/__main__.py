@@ -36,7 +36,6 @@ async def xvideo_direct(message: Message):
         a = soups.find_all('a', href=True)[2]
         link = a["href"]
         await message.edit(f"<a href='{link}'>• HERE IS YOUR LINK</a>\n\nUpload using `{config.CMD_TRIGGER}upload -r -df {link}`", parse_mode=ParseMode.HTML, disable_web_page_preview=True)
-        await userge.send_message(message.chat.id, f"{config.CMD_TRIGGER}upload -r -df {link}")
     except:
         await message.err("`something went right, if you entered correct link`")
 

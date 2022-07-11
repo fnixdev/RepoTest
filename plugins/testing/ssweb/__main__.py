@@ -46,6 +46,7 @@ async def web_ss(message: Message):
     key = md5((str(query) + scl_secret).encode()).hexdigest()
     url = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={query}"
     await message.edit("`generating image..`")
+    file_ = None
     try:
         file_ = download(url, config.Dynamic.DOWN_PATH)
     except Exception:

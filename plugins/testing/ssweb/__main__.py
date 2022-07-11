@@ -45,16 +45,16 @@ async def web_ss(message: Message):
     scl_secret = soup.findAll("input")[1]["value"]
     key = md5((str(query) + scl_secret).encode()).hexdigest()
     url = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={query}"
-    await message.edit("`generating image..`")
+    await message.edit("`Generating image..`")
     file_ = None
     try:
         file_ = download(url, config.Dynamic.DOWN_PATH)
     except Exception:
         return await message.err("Fail to generate image.")
     if message.client.is_bot:
-        await userge.bot.send_photo(message.chat.id, photo=file_, caption="`Powered By @HilzuUB`")
+        await userge.bot.send_document(message.chat.id, document=file_, caption="`Powered By @HilzuUB`")
     else:
         await message.delete()
-        await userge.send_photo(message.chat.id, photo=file_, caption="`Powered By @HilzuUB`")
+        await userge.send_photo(message.chat.id, document=file_, caption="`Powered By @HilzuUB`")
     if os.path.exists(file_):
         os.remove(file_)

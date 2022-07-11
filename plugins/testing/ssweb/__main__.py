@@ -39,19 +39,21 @@ async def web_ss(message: Message):
     valid = validators.url(query)
     if not valid == True:
         return await message.err("Insert a valid URL")
+    await message.edit("`Getting access key..`")
     async with aiohttp.ClientSession() as ses, ses.get("https://screenshotlayer.com") as resp:
         soup = BeautifulSoup(await resp.text(), features="html.parser")
     scl_secret = soup.findAll("input")[1]["value"]
     key = md5((str(query) + scl_secret).encode()).hexdigest()
     url = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={query}"
+    await message.edit("`generating image..`")
     try:
         file_ = download(url, config.Dynamic.DOWN_PATH)
     except Exception:
         return await message.err("Fail to generate image.")
     if message.client.is_bot:
-        await userge.bot.send_message(file_, "`Powered By @HilzuUB`")
+        await userge.bot.send_photo(message.chat.id, photo=file_, caption="`Powered By @HilzuUB`")
     else:
         await message.delete()
-        await userge.send_message(file_, "`Powered By @HilzuUB`")
+        await userge.send_photo(message.chat.id, photo=file_, caption="`Powered By @HilzuUB`")
     if os.path.exists(file_):
         os.remove(file_)

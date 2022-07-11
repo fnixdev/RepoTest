@@ -11,10 +11,11 @@ import aiohttp
 import aiofiles
 import validators
 
+from wget import download
 from hashlib import md5
 from bs4 import BeautifulSoup
 
-from userge import userge, Message
+from userge import userge, Message, config
 
 
 @userge.on_cmd(
@@ -34,6 +35,7 @@ async def web_ss(message: Message):
             query = reply.caption
     if not query:
         return await message.err("Input or reply to a valid URL", del_in=5)
+    await message.edit("`Checking URL..`")
     valid = validators.url(query)
     if not valid == True:
         return await message.err("Insert a valid URL")
@@ -42,17 +44,14 @@ async def web_ss(message: Message):
     scl_secret = soup.findAll("input")[1]["value"]
     key = md5((str(query) + scl_secret).encode()).hexdigest()
     url = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={query}"
-    file_ = None
     try:
-        async with aiohttp.ClientSession() as session, session.get(url) as res:
-            file_ = "HilzuUB.png"
-            file = await aiofiles.open(file_, mode="wb"), await file.write(await res.read()), await file.close()
+        file_ = download(url, config.Dynamic.DOWN_PATH)
     except Exception:
         return await message.err("Fail to generate image.")
     if message.client.is_bot:
-        await userge.bot.send_message(file, "`Powered By @HilzuUB`")
+        await userge.bot.send_message(file_, "`Powered By @HilzuUB`")
     else:
         await message.delete()
-        await userge.send_message(file, "`Powered By @HilzuUB`")
-    if os.path.exists(file):
-        os.remove(file)
+        await userge.send_message(file_, "`Powered By @HilzuUB`")
+    if os.path.exists(file_):
+        os.remove(file_)

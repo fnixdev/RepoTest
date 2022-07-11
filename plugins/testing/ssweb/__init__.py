@@ -4,5 +4,5 @@
 #
 # ==
 
-""" logo generator """
+""" screenshot website """
 

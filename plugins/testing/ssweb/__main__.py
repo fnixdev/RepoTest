@@ -54,6 +54,8 @@ async def web_ss(message: Message):
                 f = await aiofiles.open(file_path, mode='wb')
                 await f.write(await res.read())
                 await f.close()
+            else:
+                return await message.err("Fail to generate image.")
     except Exception:
         return await message.err("Fail to generate image.")
     if message.client.is_bot:

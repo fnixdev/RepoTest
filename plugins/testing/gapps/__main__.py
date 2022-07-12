@@ -23,13 +23,13 @@ from ...builtin import sudo
     }
 )
 async def latest_gapps(message: Message):
-    link = "https://sourceforge.net/projects/flamegapps/files/arm64/canary/android-12/"
+    link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12/"
     url = get(link)
     page = BeautifulSoup(url.content, "lxml")
     content = page.tbody.tr
     date = content["title"]
     date2 = date.replace("-", "")
-    flame = "{link}{date}/FlameGApps-Canary-12.0-{varient}-arm64-{date2}.zip/download"
+    flame = "{link}{date}/FlameGApps-12.0-{varient}-arm64-{date2}.zip/download"
     basic = flame.format(link=link, date=date, varient="basic", date2=date2)
     full = flame.format(link=link, date=date, varient="full", date2=date2)
     await message.reply(f"{basic}\n{full}")

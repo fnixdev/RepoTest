@@ -32,7 +32,7 @@ async def latest_gapps(message: Message):
     flame = "{link}{date}/FlameGApps-12.0-{varient}-arm64-{date2}.zip/download"
     basic = flame.format(link=link, date=date, varient="basic", date2=date2)
     full = flame.format(link=link, date=date, varient="full", date2=date2)
-    await message.reply(f"{basic}\n{full}")
+    await message.reply(f"[Flame Basic]({basic})\n[Flame Full]({full})")
 
 
 

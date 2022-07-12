@@ -58,10 +58,7 @@ async def web_ss(message: Message):
                 return await message.err("Fail to generate image.")
     except Exception:
         return await message.err("Fail to generate image.")
-    if message.client.is_bot:
-        await userge.bot.send_document(message.chat.id, document=file_path, caption="`Powered By @HilzuUB`")
-    else:
-        await message.delete()
-        await userge.send_photo(message.chat.id, document=file_path, caption="`Powered By @HilzuUB`")
+    await message.delete()
+    await message.reply_document(document=file_path, caption="`Powered By @HilzuUB`")
     if os.path.exists(file_path):
         os.remove(file_path)

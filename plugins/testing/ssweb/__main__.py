@@ -11,11 +11,10 @@ import aiohttp
 import aiofiles
 import validators
 
-from wget import download
 from hashlib import md5
 from bs4 import BeautifulSoup
 
-from userge import userge, Message, config
+from userge import userge, Message
 
 
 @userge.on_cmd(

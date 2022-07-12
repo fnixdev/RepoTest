@@ -3,5 +3,3 @@
 # = All copyrights to UsergeTeam
 #
 # ==
-
-""" gapps module """

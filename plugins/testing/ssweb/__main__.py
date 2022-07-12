@@ -46,15 +46,20 @@ async def web_ss(message: Message):
     key = md5((str(query) + scl_secret).encode()).hexdigest()
     url = f"https://screenshotlayer.com/php_helper_scripts/scl_api.php?secret_key={key}&url={query}"
     await message.edit("`Generating image..`")
-    file_ = None
+    file_path = None
     try:
-        file_ = download(url, config.Dynamic.DOWN_PATH)
+        async with aiohttp.ClientSession() as session, session.get(url) as res:
+            if res.status == 200:
+                file_path = "HilzuUB.png"
+                f = await aiofiles.open(file_path, mode='wb')
+                await f.write(await res.read())
+                await f.close()
     except Exception:
         return await message.err("Fail to generate image.")
     if message.client.is_bot:
-        await userge.bot.send_document(message.chat.id, document=file_, caption="`Powered By @HilzuUB`")
+        await userge.bot.send_document(message.chat.id, document=file_path, caption="`Powered By @HilzuUB`")
     else:
         await message.delete()
-        await userge.send_photo(message.chat.id, document=file_, caption="`Powered By @HilzuUB`")
-    if os.path.exists(file_):
-        os.remove(file_)
+        await userge.send_photo(message.chat.id, document=file_path, caption="`Powered By @HilzuUB`")
+    if os.path.exists(file_path):
+        os.remove(file_path)

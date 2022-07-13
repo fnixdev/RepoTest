@@ -64,18 +64,20 @@ async def nik_(version):
     }
 )
 async def latest_gapps(message: Message):
-    buttons = InlineKeyboardMarkup([
+    reply_markup = InlineKeyboardMarkup(
         [
-            InlineKeyboardButton(
-                text="11", callback_data=""),
-            InlineKeyboardButton(
-                text="12", callback_data=""),
-            InlineKeyboardButton(
-                text="12L", callback_data=""),
+            [
+                InlineKeyboardButton(
+                    text="11", callback_data=""),
+                InlineKeyboardButton(
+                    text="12", callback_data=""),
+                InlineKeyboardButton(
+                    text="12L", callback_data=""),
+            ]
         ]
-    ])
+    )
     if message.client.is_bot:
-        await userge.bot.send_message(message.chat.id, "**Select gapps version**", reply_markup=buttons)
+        await userge.bot.send_message(message.chat.id, "**Select gapps version**", reply_markup=reply_markup)
     else:
         await message.delete()
         username = (await userge.bot.get_me()).username
@@ -113,28 +115,31 @@ if userge.has_bot:
         ),
         group=-2
     )
-    async def inline_iydl(_, inline_query: InlineQuery):
-        results = []
-        buttons = InlineKeyboardMarkup([
-            [
-                InlineKeyboardButton(
-                    text="11", callback_data=""),
-                InlineKeyboardButton(
-                    text="12", callback_data=""),
-                InlineKeyboardButton(
-                    text="12L", callback_data=""),
-            ]
-        ])
-        results.append(
+    async def inline_gap(_, inline_query: InlineQuery):
+        results = [
             InlineQueryResultArticle(
                 title="Gapps",
                 input_message_content=InputTextMessageContent(
                     "**Select gapps version**"
                 ),
+                url="https://github.com/fnixdev/Hilzu",
                 description="Get latest gapps",
-                reply_markup=buttons
+                thumb_url="https://telegra.ph/file/aa2776cc8f104120d2e4a.jpg",
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="11", callback_data=""),
+                            InlineKeyboardButton(
+                                text="12", callback_data=""),
+                            InlineKeyboardButton(
+                                text="12L", callback_data=""),
+                        ]
+                    ]
+                )
             )
-        )
+        ]
+        await inline_query.answer(results=results, cache_time=3)
 
     # ==  Sector select gapps\
 

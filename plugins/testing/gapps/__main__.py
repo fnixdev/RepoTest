@@ -68,11 +68,11 @@ async def latest_gapps(message: Message):
         [
             [
                 InlineKeyboardButton(
-                    text="11", callback_data=""),
+                    text="11", callback_data="gapps_v|11.0"),
                 InlineKeyboardButton(
-                    text="12", callback_data=""),
+                    text="12", callback_data="gapps_v|12.0"),
                 InlineKeyboardButton(
-                    text="12L", callback_data=""),
+                    text="12L", callback_data="gapps_v|12.1"),
             ]
         ]
     )
@@ -129,11 +129,11 @@ if userge.has_bot:
                     [
                         [
                             InlineKeyboardButton(
-                                text="11", callback_data=""),
+                                text="11", callback_data="gapps_v|11.0"),
                             InlineKeyboardButton(
-                                text="12", callback_data=""),
+                                text="12", callback_data="gapps_v|12.0"),
                             InlineKeyboardButton(
-                                text="12L", callback_data=""),
+                                text="12L", callback_data="gapps_v|12.1"),
                         ]
                     ]
                 )

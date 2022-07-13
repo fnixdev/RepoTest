@@ -137,17 +137,14 @@ if userge.has_bot:
                                  version=version, varient="basic", date2=date2)
             full = flame.format(link=link, date=date, version=version,
                                 varient="full", date2=date2)
-            buttons = InlineKeyboardMarkup(
-                [
-                    [
+            buttons = [
                         InlineKeyboardButton(
                             text="Flame Basic", url=basic),
                         InlineKeyboardButton(
                             text="Flame Full", url=full),
                     ]
-                ])
             buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
-            await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=buttons)
+            await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=InlineKeyboardMarkup([buttons]))
 
         elif cb[0] == "gapps_nik":
             if version == "11.0":

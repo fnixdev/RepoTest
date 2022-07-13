@@ -148,15 +148,16 @@ if userge.has_bot:
     async def gapps_filter_cq(cq: CallbackQuery):
         cb = cq.data.split("|")
         version = cb[1]
-        buttons = [
+        buttons = InlineKeyboardMarkup ([
             [
                 InlineKeyboardButton(
                     text="Flame Gapps", callback_data=f"gapps_flame|{version}"),
                 InlineKeyboardButton(
                     text="Nik Gapps", callback_data=f"gapps_nik|{version}"),
             ]
-        ]
-        await cq.edit_message_text(text="**Select your preferred gapps**", reply_markup=buttons)
+        ])
+        await cq.edit_message_text(text=f"**Select your preferred gapps for {version}**", reply_markup=buttons)
+
 
     @userge.bot.on_callback_query(filters=filters.regex(pattern=r"gapps_(flame|nik)\|(.*)"))
     @check_owner

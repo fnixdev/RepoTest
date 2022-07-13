@@ -4,6 +4,8 @@
 #
 # ==
 
+import re
+
 from bs4 import BeautifulSoup
 from requests import get
 
@@ -14,6 +16,7 @@ from pyrogram.types import CallbackQuery, InlineQuery, InlineQueryResultArticle,
 from userge import Message, userge, config as Config
 from ...builtin import sudo
 
+COMPILE = re.compile(r"(.*)[*]*\-arm")
 
 @userge.on_cmd(
     "gapps", about={
@@ -111,9 +114,14 @@ if userge.has_bot:
                     text="Flame Gapps", callback_data=f"gapps_flame|{version}"),
                 InlineKeyboardButton(
                     text="Nik Gapps", callback_data=f"gapps_nik|{version}"),
+            ],
+            [
+                InlineKeyboardButton(
+                    text="Back", callback_data="gapps_main"),
             ]
         ])
         await cq.edit_message_text(text=f"**Select your preferred gapps for {version}**", reply_markup=buttons)
+
 
     @userge.bot.on_callback_query(filters=filters.regex(pattern=r"gapps_(flame|nik)\|(.*)"))
     @check_owner
@@ -127,25 +135,6 @@ if userge.has_bot:
                 link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12/"
             elif version == "12.1":
                 link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12.1/"
-            url = get(link)
-            page = BeautifulSoup(url.content, "lxml")
-            content = page.tbody.tr
-            date = content["title"]
-            url2 = get(f"{link}{date}")
-            page2 = BeautifulSoup(url2.content, "lxml")
-            name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
-            but_rc = []
-            buttons = []
-            for item in name:
-                nam = item.find("a")
-                but_rc.append(InlineKeyboardButton(
-                    text=nam.span.text[:-19], url=nam['href'])
-                )
-                if len(but_rc) == 2:
-                    buttons.append(but_rc)
-                    but_rc = []
-            buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
-            await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=InlineKeyboardMarkup(buttons))
 
         elif cb[0] == "gapps_nik":
             if version == "11.0":
@@ -154,22 +143,42 @@ if userge.has_bot:
                 link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-S/"
             if version == "12.1":
                 link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-SL/"
-            url = get(link)
-            page = BeautifulSoup(url.content, "lxml")
-            content = page.tbody.tr
-            date = content["title"]
-            url2 = get(f"{link}{date}")
-            page2 = BeautifulSoup(url2.content, "lxml")
-            name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
-            but_rc = []
-            buttons = []
-            for item in name:
-                nam = item.find("a")
-                but_rc.append(InlineKeyboardButton(
-                    text=nam.span.text[:-29].replace("-", " "), url=nam['href'])
-                )
-                if len(but_rc) == 2:
-                    buttons.append(but_rc)
-                    but_rc = []
-            buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
-            await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup(buttons))
+        url = get(link)
+        page = BeautifulSoup(url.content, "lxml")
+        content = page.tbody.tr
+        date = content["title"]
+        url2 = get(f"{link}{date}")
+        page2 = BeautifulSoup(url2.content, "lxml")
+        name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
+        btn_sub = []
+        buttons = []
+        for item in name:
+            nam = item.find("a")
+            string = nam.span.text
+            match = re.search(COMPILE, string)
+            btn_sub.append(InlineKeyboardButton(
+                text=match.group(1), url=nam['href'])
+            )
+            if len(btn_sub) == 2:
+                buttons.append(btn_sub)
+                btn_sub = []
+        buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
+        await cq.edit_message_text(text=f"**Select your preferred gapps version**", reply_markup=InlineKeyboardMarkup(buttons))
+
+
+    @userge.bot.on_callback_query(filters=filters.regex(pattern=r"gapps_main"))
+    @check_owner
+    async def gapps_filter_cq(cq: CallbackQuery):
+        reply_markup = InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        text="11", callback_data="gapps_v|11.0"),
+                    InlineKeyboardButton(
+                        text="12", callback_data="gapps_v|12.0"),
+                    InlineKeyboardButton(
+                        text="12L", callback_data="gapps_v|12.1"),
+                ]
+            ]
+        )
+        await cq.edit_message_text(text="**Select gapps version**", reply_markup=reply_markup)

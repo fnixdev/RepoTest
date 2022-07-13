@@ -175,5 +175,5 @@ if userge.has_bot:
             ]
             for item in name:
                 nam = item.find("a")
-                btn += (InlineKeyboardButton(text=nam.span.text, url=nam['href']))
+                btn.append(InlineKeyboardButton(text=nam.span.text, url=nam['href']))
             await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup([btn]))

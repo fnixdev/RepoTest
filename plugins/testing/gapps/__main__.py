@@ -9,7 +9,7 @@ from requests import get
 
 from pyrogram import filters
 from pyrogram.errors import MessageIdInvalid, MessageNotModified
-from pyrogram.types import CallbackQuery, InlineQuery, InlineQueryResultPhoto, InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import CallbackQuery, InlineQuery, InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup
 
 from userge import Message, userge, config as Config
 from ...builtin import sudo
@@ -175,6 +175,3 @@ if userge.has_bot:
                     but_rc = []
             buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
             await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup(buttons))
-
-def back_btn(value: str) -> InlineKeyboardButton:
-    

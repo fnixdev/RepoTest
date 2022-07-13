@@ -144,7 +144,7 @@ if userge.has_bot:
                             text="Flame Full", url=full),
                     ]
             buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
-            await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=InlineKeyboardMarkup([buttons]))
+            await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=InlineKeyboardMarkup(buttons))
 
         elif cb[0] == "gapps_nik":
             if version == "11.0":

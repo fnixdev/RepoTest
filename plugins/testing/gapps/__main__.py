@@ -139,7 +139,7 @@ if userge.has_bot:
             for item in name:
                 nam = item.find("a")
                 but_rc.append(InlineKeyboardButton(
-                    text=nam.span.text, url=nam['href'])
+                    text=nam.span.text[:-19], url=nam['href'])
                 )
                 if len(but_rc) == 2:
                     buttons.append(but_rc)
@@ -166,7 +166,7 @@ if userge.has_bot:
             for item in name:
                 nam = item.find("a")
                 but_rc.append(InlineKeyboardButton(
-                    text=nam.span.text, url=nam['href'])
+                    text=nam.span.text[:-29].replace("-", " "), url=nam['href'])
                 )
                 if len(but_rc) == 2:
                     buttons.append(but_rc)

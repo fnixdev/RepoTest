@@ -163,7 +163,7 @@ if userge.has_bot:
             page = BeautifulSoup(url.content, "lxml")
             content = page.tbody.tr
             date = content["title"]
-            url2 = get(link+date)
+            url2 = get(f"{link}{date}")
             page2 = BeautifulSoup(url2.content, "lxml")
             name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
             gapps_btn = []

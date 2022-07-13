@@ -6,14 +6,12 @@
 
 from bs4 import BeautifulSoup
 from requests import get
-from typing import List, Callable, Dict, Union, Any
 
 from pyrogram import filters
 from pyrogram.errors import MessageIdInvalid, MessageNotModified
 from pyrogram.types import CallbackQuery, InlineQuery, InlineQueryResultPhoto, InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup
 
 from userge import Message, userge, config as Config
-from userge.utils import get_response
 from ...builtin import sudo
 
 
@@ -148,6 +146,7 @@ if userge.has_bot:
                             text="Flame Full", url=full),
                     ]
                 ])
+            buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
             await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=buttons)
 
         elif cb[0] == "gapps_nik":
@@ -174,5 +173,8 @@ if userge.has_bot:
                 if len(but_rc) == 2:
                     buttons.append(but_rc)
                     but_rc = []
+            buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
             await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup(buttons))
 
+def back_btn(value: str) -> InlineKeyboardButton:
+    

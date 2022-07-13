@@ -166,8 +166,14 @@ if userge.has_bot:
             url2 = get(f"{link}{date}")
             page2 = BeautifulSoup(url2.content, "lxml")
             name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
-            btn = []
+            btn = [
+                [
+                    InlineKeyboardButton(
+                        "Back", callback_data=f"gapps_v|{version}"
+                    )
+                ]
+            ]
             for item in name:
                 nam = item.find("a")
-                btn.append(InlineKeyboardButton(text=nam.span.text, url=nam['href']))
+                btn += (InlineKeyboardButton(text=nam.span.text, url=nam['href']))
             await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup([btn]))

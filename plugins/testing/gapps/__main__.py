@@ -64,7 +64,7 @@ async def nik_(version):
     }
 )
 async def latest_gapps(message: Message):
-    buttons = [
+    buttons = InlineKeyboardMarkup([
         [
             InlineKeyboardButton(
                 text="11", callback_data=""),
@@ -73,7 +73,7 @@ async def latest_gapps(message: Message):
             InlineKeyboardButton(
                 text="12L", callback_data=""),
         ]
-    ]
+    ])
     if message.client.is_bot:
         await userge.bot.send_message(message.chat.id, "**Select gapps version**", reply_markup=buttons)
     else:
@@ -115,7 +115,7 @@ if userge.has_bot:
     )
     async def inline_iydl(_, inline_query: InlineQuery):
         results = []
-        buttons = [
+        buttons = InlineKeyboardMarkup([
             [
                 InlineKeyboardButton(
                     text="11", callback_data=""),
@@ -124,7 +124,7 @@ if userge.has_bot:
                 InlineKeyboardButton(
                     text="12L", callback_data=""),
             ]
-        ]
+        ])
         results.append(
             InlineQueryResultArticle(
                 title="Gapps",

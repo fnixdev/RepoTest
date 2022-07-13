@@ -6,6 +6,7 @@
 
 from bs4 import BeautifulSoup
 from requests import get
+from typing import Any, Awaitable, Callable, List
 
 from pyrogram import filters
 from pyrogram.errors import MessageIdInvalid, MessageNotModified
@@ -210,6 +211,20 @@ if userge.has_bot:
             buttons = InlineKeyboardMarkup ([])
             for item in name:
                 nam = item.find("a")
-                btn = [InlineKeyboardButton(text=nam.span.text, url=nam['href'])]
-                buttons.append(btn)
+                buttons += sublists(
+                    list(
+                        map(
+                            lambda x: InlineKeyboardButton(text=nam.span.text, url=nam['href'])
+                        )
+                    ),
+                    width=1,
+                )
+
             await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=buttons)
+
+
+
+
+def sublists(input_list: List[Any], width: int = 3) -> List[List[Any]]:
+    """retuns a single list of multiple sublist of fixed width"""
+    return [input_list[x : x + width] for x in range(0, len(input_list), width)]

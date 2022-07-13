@@ -165,6 +165,51 @@ if userge.has_bot:
         cb = cq.data.split("|")
         version = cb[1]
         if cb[0] == "gapps_flame":
-            aaa = ''
+            if version == "11.0":
+                link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-11/"
+            elif version == "12.0":
+                link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12/"
+            elif version == "12.1":
+                link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12.1/"
+            url = get(link)
+            page = BeautifulSoup(url.content, "lxml")
+            content = page.tbody.tr
+            date = content["title"]
+            date2 = date.replace("-", "")
+            flame = "{link}{date}/FlameGApps-{version}-{varient}-arm64-{date2}.zip/download"
+            basic = flame.format(link=link, date=date,
+                                version=version, varient="basic", date2=date2)
+            full = flame.format(link=link, date=date, version=version,
+                                varient="full", date2=date2)
+            buttons = InlineKeyboardMarkup (
+            [
+                [
+                    InlineKeyboardButton(
+                        text="Flame Basic", url=basic),
+                    InlineKeyboardButton(
+                        text="Flame Full", url=full),
+                ]
+            ])
+            await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=buttons)
+
+
         elif cb[0] == "gapps_nik":
-            aaa = ''
+            if version == "11.0":
+                link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-R/"
+            if version == "12.0":
+                link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-S/"
+            if version == "12.1":
+                link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-SL/"
+            url = get(link)
+            page = BeautifulSoup(url.content, "lxml")
+            content = page.tbody.tr
+            date = content["title"]
+            url2 = get(link+date)
+            page2 = BeautifulSoup(url2.content, "lxml")
+            name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
+            buttons = InlineKeyboardMarkup ([])
+            for item in name:
+                nam = item.find("a")
+                btn = [InlineKeyboardButton(text=nam.span.text, url=nam['href'])]
+                buttons.append(btn)
+            await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=buttons)

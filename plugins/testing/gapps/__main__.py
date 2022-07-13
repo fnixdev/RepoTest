@@ -17,48 +17,6 @@ from userge.utils import get_response
 from ...builtin import sudo
 
 
-async def flame_(version):
-    if version == "11.0":
-        link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-11/"
-    if version == "12.0":
-        link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12/"
-    if version == "12.1":
-        link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12.1/"
-    url = get(link)
-    page = BeautifulSoup(url.content, "lxml")
-    content = page.tbody.tr
-    date = content["title"]
-    date2 = date.replace("-", "")
-    flame = "{link}{date}/FlameGApps-{version}-{varient}-arm64-{date2}.zip/download"
-    basic = flame.format(link=link, date=date,
-                         version=version, varient="basic", date2=date2)
-    full = flame.format(link=link, date=date, version=version,
-                        varient="full", date2=date2)
-    return basic, full
-
-
-async def nik_(version):
-    if version == "11.0":
-        link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-R/"
-    if version == "12.0":
-        link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-S/"
-    if version == "12.1":
-        link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-SL/"
-    url = get(link)
-    page = BeautifulSoup(url.content, "lxml")
-    content = page.tbody.tr
-    date = content["title"]
-    url2 = get(link+date)
-    page2 = BeautifulSoup(url2.content, "lxml")
-    name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
-    results = []
-    for item in name:
-        nam = item.find("a")
-        string_ = f"[{nam.span.text}]({nam['href']})"
-        results.append(string_)
-    return results
-
-
 @userge.on_cmd(
     "gapps", about={
         'header': "get latest google apps"
@@ -208,21 +166,13 @@ if userge.has_bot:
             url2 = get(link+date)
             page2 = BeautifulSoup(url2.content, "lxml")
             name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
-            buttons = InlineKeyboardMarkup ([])
+            btn = []
+            gapps_btn = List[InlineKeyboardButton] = []
             for item in name:
                 nam = item.find("a")
-                buttons += sublists(
-                    list(
-                        map(
-                            lambda x: InlineKeyboardButton(text=nam.span.text, url=nam['href'])
-                        )
-                    ),
-                    width=1,
-                )
-
-            await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=buttons)
-
-
+                gapps_btn.append(InlineKeyboardButton(text=nam.span.text, url=nam['href']))
+            btn += sublists(gapps_btn, width=2)
+            await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup(btn))
 
 
 def sublists(input_list: List[Any], width: int = 3) -> List[List[Any]]:

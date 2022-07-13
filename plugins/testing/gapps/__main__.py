@@ -6,7 +6,7 @@
 
 from bs4 import BeautifulSoup
 from requests import get
-from typing import Any, Awaitable, Callable, List
+from typing import List, Callable, Dict, Union, Any
 
 from pyrogram import filters
 from pyrogram.errors import MessageIdInvalid, MessageNotModified
@@ -107,7 +107,7 @@ if userge.has_bot:
     async def gapps_filter_cq(cq: CallbackQuery):
         cb = cq.data.split("|")
         version = cb[1]
-        buttons = InlineKeyboardMarkup ([
+        buttons = InlineKeyboardMarkup([
             [
                 InlineKeyboardButton(
                     text="Flame Gapps", callback_data=f"gapps_flame|{version}"),
@@ -116,7 +116,6 @@ if userge.has_bot:
             ]
         ])
         await cq.edit_message_text(text=f"**Select your preferred gapps for {version}**", reply_markup=buttons)
-
 
     @userge.bot.on_callback_query(filters=filters.regex(pattern=r"gapps_(flame|nik)\|(.*)"))
     @check_owner
@@ -137,20 +136,19 @@ if userge.has_bot:
             date2 = date.replace("-", "")
             flame = "{link}{date}/FlameGApps-{version}-{varient}-arm64-{date2}.zip/download"
             basic = flame.format(link=link, date=date,
-                                version=version, varient="basic", date2=date2)
+                                 version=version, varient="basic", date2=date2)
             full = flame.format(link=link, date=date, version=version,
                                 varient="full", date2=date2)
-            buttons = InlineKeyboardMarkup (
-            [
+            buttons = InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton(
-                        text="Flame Basic", url=basic),
-                    InlineKeyboardButton(
-                        text="Flame Full", url=full),
-                ]
-            ])
+                    [
+                        InlineKeyboardButton(
+                            text="Flame Basic", url=basic),
+                        InlineKeyboardButton(
+                            text="Flame Full", url=full),
+                    ]
+                ])
             await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=buttons)
-
 
         elif cb[0] == "gapps_nik":
             if version == "11.0":
@@ -166,12 +164,15 @@ if userge.has_bot:
             url2 = get(f"{link}{date}")
             page2 = BeautifulSoup(url2.content, "lxml")
             name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
-            btn = [
-                    InlineKeyboardButton(
-                        "Back", callback_data=f"gapps_v|{version}"
-                    )
-                ]
+            but_rc = []
+            buttons = []
             for item in name:
                 nam = item.find("a")
-                btn.append(InlineKeyboardButton(text=nam.span.text, url=nam['href']))
-            await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup([btn]))
+                but_rc.append(InlineKeyboardButton(
+                    text=nam.span.text, url=nam['href'])
+                )
+                if len(but_rc) == 2:
+                    buttons.append(but_rc)
+                    but_rc = []
+            await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup(buttons))
+

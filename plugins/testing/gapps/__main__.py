@@ -16,6 +16,45 @@ from userge.utils import get_response
 from ...builtin import sudo
 
 
+async def flame_(version):
+    if version == "11.0":
+        link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-11/"
+    if version == "12.0":
+        link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12/"
+    if version == "12.1":
+        link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12.1/"
+    url = get(link)
+    page = BeautifulSoup(url.content, "lxml")
+    content = page.tbody.tr
+    date = content["title"]
+    date2 = date.replace("-", "")
+    flame = "{link}{date}/FlameGApps-{version}-{varient}-arm64-{date2}.zip/download"
+    basic = flame.format(link=link, date=date, version=version, varient="basic", date2=date2)
+    full = flame.format(link=link, date=date, version=version, varient="full", date2=date2)
+    return basic, full
+
+
+async def nik_(version):
+    if version == "11.0":
+        link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-R/"
+    if version == "12.0":
+        link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-S/"
+    if version == "12.1":
+        link = "https://sourceforge.net/projects/nikgapps/files/Releases/NikGapps-SL/"
+    url = get(link)
+    page = BeautifulSoup(url.content, "lxml")
+    content = page.tbody.tr
+    date = content["title"]
+    url2 = get(link+date)
+    page2 = BeautifulSoup(url2.content, "lxml")
+    name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
+    results = []
+    for item in name:
+        nam = item.find("a")
+        string_ = f"[{nam.span.text}]({nam['href']})"
+        results.append(string_)
+    return results
+
 
 @userge.on_cmd(
     "gapps", about={
@@ -23,16 +62,8 @@ from ...builtin import sudo
     }
 )
 async def latest_gapps(message: Message):
-    link = "https://sourceforge.net/projects/flamegapps/files/arm64/android-12/"
-    url = get(link)
-    page = BeautifulSoup(url.content, "lxml")
-    content = page.tbody.tr
-    date = content["title"]
-    date2 = date.replace("-", "")
-    flame = "{link}{date}/FlameGApps-12.0-{varient}-arm64-{date2}.zip/download"
-    basic = flame.format(link=link, date=date, varient="basic", date2=date2)
-    full = flame.format(link=link, date=date, varient="full", date2=date2)
-    await message.reply(f"[Flame Basic]({basic})\n[Flame Full]({full})")
+    gapps = nik_("12.1")
+    await message.reply(gapps)
 
 
 

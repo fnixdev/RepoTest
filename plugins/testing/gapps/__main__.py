@@ -131,18 +131,19 @@ if userge.has_bot:
             page = BeautifulSoup(url.content, "lxml")
             content = page.tbody.tr
             date = content["title"]
-            date2 = date.replace("-", "")
-            flame = "{link}{date}/FlameGApps-{version}-{varient}-arm64-{date2}.zip/download"
-            basic = flame.format(link=link, date=date,
-                                 version=version, varient="basic", date2=date2)
-            full = flame.format(link=link, date=date, version=version,
-                                varient="full", date2=date2)
-            buttons = [
-                        InlineKeyboardButton(
-                            text="Flame Basic", url=basic),
-                        InlineKeyboardButton(
-                            text="Flame Full", url=full),
-                    ]
+            url2 = get(f"{link}{date}")
+            page2 = BeautifulSoup(url2.content, "lxml")
+            name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
+            but_rc = []
+            buttons = []
+            for item in name:
+                nam = item.find("a")
+                but_rc.append(InlineKeyboardButton(
+                    text=nam.span.text, url=nam['href'])
+                )
+                if len(but_rc) == 2:
+                    buttons.append(but_rc)
+                    but_rc = []
             buttons.append([InlineKeyboardButton(text="Back", callback_data=f"gapps_v|{version}")])
             await cq.edit_message_text(text=f"**Select your preferred flame version**", reply_markup=InlineKeyboardMarkup(buttons))
 

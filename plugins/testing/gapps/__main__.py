@@ -62,7 +62,7 @@ async def nik_(version):
     }
 )
 async def latest_gapps(message: Message):
-    gapps = nik_("12.1")
+    gapps = await nik_("12.1")
     await message.reply(gapps)
 
 

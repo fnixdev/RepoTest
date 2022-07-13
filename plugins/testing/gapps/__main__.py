@@ -166,7 +166,7 @@ if userge.has_bot:
             url2 = get(link+date)
             page2 = BeautifulSoup(url2.content, "lxml")
             name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
-            gapps_btn = List[InlineKeyboardButton] = []
+            gapps_btn = []
             for item in name:
                 nam = item.find("a")
                 gapps_btn.append(InlineKeyboardButton(text=nam.span.text, url=nam['href']))

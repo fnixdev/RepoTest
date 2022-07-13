@@ -163,11 +163,18 @@ if userge.has_bot:
             page = BeautifulSoup(url.content, "lxml")
             content = page.tbody.tr
             date = content["title"]
-            url2 = get(f"{link}{date}")
+            url2 = get(f"{base}{date}")
             page2 = BeautifulSoup(url2.content, "lxml")
             name = page2.tbody.find_all("th", {'headers': 'files_name_h'})
-            gapps_btn = []
+            btn = []
+            gapps_btn = List[InlineKeyboardButton] = []
             for item in name:
                 nam = item.find("a")
                 gapps_btn.append(InlineKeyboardButton(text=nam.span.text, url=nam['href']))
-            await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup(gapps_btn))
+            btn += sublists(gapps_btn, width=2)
+            await cq.edit_message_text(text=f"**Select your preferred nik version**", reply_markup=InlineKeyboardMarkup(btn))
+
+
+def sublists(input_list: List[Any], width: int = 3) -> List[List[Any]]:
+    """retuns a single list of multiple sublist of fixed width"""
+    return [input_list[x : x + width] for x in range(0, len(input_list), width)]

@@ -1,4 +1,4 @@
-## == Modules Userge by fnix
+# == Modules Userge by fnix
 #
 # = All copyrights to UsergeTeam
 #
@@ -9,7 +9,7 @@ from requests import get
 
 from pyrogram import filters
 from pyrogram.errors import MessageIdInvalid, MessageNotModified
-from pyrogram.types import CallbackQuery, InlineQuery, InlineQueryResultPhoto, InlineQueryResultArticle, InputTextMessageContent
+from pyrogram.types import CallbackQuery, InlineQuery, InlineQueryResultPhoto, InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup
 
 from userge import Message, userge, config as Config
 from userge.utils import get_response
@@ -29,8 +29,10 @@ async def flame_(version):
     date = content["title"]
     date2 = date.replace("-", "")
     flame = "{link}{date}/FlameGApps-{version}-{varient}-arm64-{date2}.zip/download"
-    basic = flame.format(link=link, date=date, version=version, varient="basic", date2=date2)
-    full = flame.format(link=link, date=date, version=version, varient="full", date2=date2)
+    basic = flame.format(link=link, date=date,
+                         version=version, varient="basic", date2=date2)
+    full = flame.format(link=link, date=date, version=version,
+                        varient="full", date2=date2)
     return basic, full
 
 
@@ -62,9 +64,23 @@ async def nik_(version):
     }
 )
 async def latest_gapps(message: Message):
-    gapps = await nik_("12.1")
-    await message.reply(gapps)
-
+    buttons = [
+        [
+            InlineKeyboardButton(
+                text="11", callback_data=""),
+            InlineKeyboardButton(
+                text="12", callback_data=""),
+            InlineKeyboardButton(
+                text="12L", callback_data=""),
+        ]
+    ]
+    if message.client.is_bot:
+        await userge.bot.send_message(message.chat.id, "**Select gapps version**", reply_markup=buttons)
+    else:
+        await message.delete()
+        username = (await userge.bot.get_me()).username
+        x = await userge.get_inline_bot_results(username, "gapps")
+        await userge.send_inline_bot_result(chat_id=message.chat.id, query_id=x.query_id, result_id=x.results[0].id)
 
 
 if userge.has_bot:
@@ -98,4 +114,51 @@ if userge.has_bot:
         group=-2
     )
     async def inline_iydl(_, inline_query: InlineQuery):
-        capt = ''
+        results = []
+        buttons = [
+            [
+                InlineKeyboardButton(
+                    text="11", callback_data=""),
+                InlineKeyboardButton(
+                    text="12", callback_data=""),
+                InlineKeyboardButton(
+                    text="12L", callback_data=""),
+            ]
+        ]
+        results.append(
+            InlineQueryResultArticle(
+                title="Gapps",
+                input_message_content=InputTextMessageContent(
+                    "**Select gapps version**"
+                ),
+                description="Get latest gapps",
+                reply_markup=buttons
+            )
+        )
+
+    # ==  Sector select gapps\
+
+    @userge.bot.on_callback_query(filters=filters.regex(pattern=r"gapps_v\|(.*)"))
+    @check_owner
+    async def gapps_filter_cq(cq: CallbackQuery):
+        cb = cq.data.split("|")
+        version = cb[1]
+        buttons = [
+            [
+                InlineKeyboardButton(
+                    text="Flame Gapps", callback_data=f"gapps_flame|{version}"),
+                InlineKeyboardButton(
+                    text="Nik Gapps", callback_data=f"gapps_nik|{version}"),
+            ]
+        ]
+        await cq.edit_message_text(text="**Select your preferred gapps**", reply_markup=buttons)
+
+    @userge.bot.on_callback_query(filters=filters.regex(pattern=r"gapps_(flame|nik)\|(.*)"))
+    @check_owner
+    async def gapps_filter_cq(cq: CallbackQuery):
+        cb = cq.data.split("|")
+        version = cb[1]
+        if cb[0] == "gapps_flame":
+            aaa = ''
+        elif cb[0] == "gapps_nik":
+            aaa = ''

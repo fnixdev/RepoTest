@@ -5,7 +5,7 @@
 # ==
 
 from pyrogram import filters
-from pyrogram.errors import YouBlockedUser, Stop
+from pyrogram.errors import YouBlockedUser
 
 from userge import Message, userge
 from userge.utils.exceptions import StopConversation

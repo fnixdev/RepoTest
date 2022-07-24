@@ -32,6 +32,9 @@ async def f_stat(message: Message):
             f"Fetching fstat of user <a href='tg://user?id={user_id}'><b>{user_name}</b></a>..."
         )
     except BaseException:
+        await message.edit(
+            f"Fetching fstat of user <b>{user_}</b>...\nWARNING: User not found in your database, checking Rose's database."
+        )
         user_name = user_
         user_id = user_
     msgs = []

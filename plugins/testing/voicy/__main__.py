@@ -44,7 +44,7 @@ async def f_stat(message: Message):
                 return
             msgs.append(await conv.get_response(mark_read=True))
             msgs.append(await conv.get_response(mark_read=True))
-            msgs.append(await conv.get_response(timeout=1, mark_read=True))
+            msgs.append(await conv.get_response(timeout=3, mark_read=True))
     except StopConversation:
         pass
     for msg in msgs:

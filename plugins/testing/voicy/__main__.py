@@ -4,6 +4,7 @@
 #
 # ==
 
+from pyrogram import filters
 from pyrogram.errors import YouBlockedUser
 
 from userge import Message, userge
@@ -45,13 +46,21 @@ async def f_stat(message: Message):
             except YouBlockedUser:
                 await message.err(f"**You blocked @missrose_bot, Unblock it**", del_in=5)
                 return
+            async def edited_filter(_, __, m: Message):
+                return bool(m.edit_date)
+            
+            edited = filters.create(edited_filter)
             msgs.append(await conv.get_response(mark_read=True))
             msgs.append(await conv.get_response(mark_read=True))
-            msgs.append(await conv.get_response(timeout=3, mark_read=True))
+            msgs.append(await conv.get_response(timeout=3, mark_read=True, filters=edited))
     except StopConversation:
         pass
+
+    await message.reply(msgs)
+"""
     for msg in msgs:
         if msg.text.startswith("Could not find a user"):
             await message.edit(f"User <b>{user_name}</b> (<code>{user_id}</code>) could not be found in @MissRose_bot's database.")
         else:
             await message.edit(f"{msg.text}")
+"""

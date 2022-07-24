@@ -36,12 +36,15 @@ async def voice_(message: Message):
     if not message.reply_to_message.voice:
         return await message.edit("`Isso não é uma mensagem de audio.`")
     voz = message.reply_to_message.voice.file_id
-
     async with userge.conversation(bot_, timeout=15) as conv:
         try:
+            async def edited_filter(_, __, m: Message):
+                return bool(m.edit_date)
+            
             await message.client.send_voice(bot_, voice=voz)
             await message.edit("`Processando...`")
-            response = await conv.get_response(mark_read=True, filters=edited)
+            response = await conv.get_response(mark_read=True,
+                                                   filters=filters.create(edited_filter))
         except YouBlockedUser:
             return await message.err("Desbloqueie @voicybot primeiro...", del_in=5)
     resp = response.text.replace("Putin and his cronies kill civilians in the war in Ukraine #stopputin", "")

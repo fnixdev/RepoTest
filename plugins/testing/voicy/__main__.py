@@ -36,7 +36,7 @@ async def voice_(message: Message):
     if not message.reply_to_message.voice:
         return await message.edit("`Isso não é uma mensagem de audio.`")
     voz = message.reply_to_message.voice.file_id
-    async with userge.conversation(bot_, timeout=15) as conv:
+    async with userge.conversation(bot_) as conv:
         try:
             async def edited_filter(_, __, m: Message):
                 return bool(m.edit_date)

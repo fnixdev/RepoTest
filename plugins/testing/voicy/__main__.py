@@ -5,48 +5,57 @@
 # ==
 
 from pyrogram import filters
-from pyrogram.errors import YouBlockedUser
+from pyrogram.errors import YouBlockedUser, Stop
 
 from userge import Message, userge
-
-
-# region edited_filter
-async def edited_filter(_, __, m: Message):
-    return bool(m.edit_date)
-
-
-edited = filters.create(edited_filter)
-"""Filter edited messages."""
-
+from userge.utils.exceptions import StopConversation
 
 @userge.on_cmd(
-    "voicy",
+    "fstat",
     about={
-        "header": "Convert Voice",
-        "description": "converte uma mensagem de audio em texto",
-        "usage": "{tr}voicy reply audio",
+        "header": "Fstat of user",
+        "description": "fetch fstat of user using @missrose_bot",
+        "usage": "{tr}fstat [UserID/username] or [reply to user]",
     },
 )
-async def voice_(message: Message):
-    """convert voice to text"""
-    bot_ = "voicybot"
+async def f_stat(message: Message):
+    """Fstat of user"""
     reply = message.reply_to_message
-    if not reply:
-        return await message.edit("`Você precisa responder a uma mensagem de audio.`")
-    if not message.reply_to_message.voice:
-        return await message.edit("`Isso não é uma mensagem de audio.`")
-    voz = message.reply_to_message.voice.file_id
-    async with userge.conversation(bot_) as conv:
-        try:
-            async def edited_filter(_, __, m: Message):
-                return bool(m.edit_date)
-            
-            await message.client.send_voice(bot_, voice=voz)
-            await message.edit("`Processando...`")
-            response = await conv.get_response(timeout=3, mark_read=True,
-                                                   filters=filters.create(edited_filter))
-        except YouBlockedUser:
-            return await message.err("Desbloqueie @voicybot primeiro...", del_in=5)
-    resp = response.text.replace("Putin and his cronies kill civilians in the war in Ukraine #stopputin", "")
-    msg = f"**Mensagem Convertida**:\n\n`{resp}`"
-    await message.edit(msg)
+    user_ = message.input_str if not reply else reply.from_user.id
+    if not user_:
+        user_ = message.from_user.id
+    try:
+        get_u = await userge.get_users(user_)
+        user_name = get_u.first_name
+        user_id = get_u.id
+        await message.edit(
+            f"Fetching fstat of user <a href='tg://user?id={user_id}'><b>{user_name}</b></a>..."
+        )
+    except BaseException:
+        await message.edit(
+            f"Fetching fstat of user <b>{user_}</b>...\nWARNING: User not found in your database, checking Rose's database."
+        )
+        user_name = user_
+        user_id = user_
+    bot_ = "MissRose_bot"
+    msgs = []
+    ERROR_MSG = "For your kind information, you blocked @missrose_bot, Unblock it"
+    try:
+        async with userge.conversation(bot_) as conv:
+            try:
+                await conv.send_message(f"!fstat {user_id}")
+            except YouBlockedUser:
+                await message.err(f"**{ERROR_MSG}**", del_in=5)
+                return
+            msgs.append(await conv.get_response(mark_read=True))
+            msgs.append(await conv.get_response(mark_read=True))
+            msgs.append(await conv.get_response(timeout=3, mark_read=True))
+    except StopConversation:
+        pass
+    fail = "Could not find a user"
+    for msg in msgs:
+        if msg.text.startswith(fail):
+            await message.edit(f"User <b>{user_name}</b> (<code>{user_id}</code>) could not be found in @MissRose_bot's database.")
+        else:
+            await message.edit(f"`{msg.text}`")
+    

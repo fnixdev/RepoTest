@@ -52,7 +52,8 @@ async def f_stat(message: Message):
             edited = filters.create(edited_filter)
             msgs.append(await conv.get_response(mark_read=True))
             msgs.append(await conv.get_response(mark_read=True))
-            msgs.append(await conv.get_response(timeout=3, mark_read=True, filters=edited))
+            msgs.append(await conv.get_response(mark_read=True))
+            msgs.append(await conv.get_response(timeout=3, mark_read=True))
     except StopConversation:
         pass
 

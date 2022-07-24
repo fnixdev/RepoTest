@@ -43,7 +43,7 @@ async def voice_(message: Message):
             
             await message.client.send_voice(bot_, voice=voz)
             await message.edit("`Processando...`")
-            response = await conv.get_response(mark_read=True,
+            response = await conv.get_response(timeout=3, mark_read=True,
                                                    filters=filters.create(edited_filter))
         except YouBlockedUser:
             return await message.err("Desbloqueie @voicybot primeiro...", del_in=5)

@@ -1,14 +1,14 @@
-## == Modules Userge by fnix
+# == Modules Userge by fnix
 #
 # = All copyrights to UsergeTeam
 #
 # ==
 
-from pyrogram import filters
 from pyrogram.errors import YouBlockedUser
 
 from userge import Message, userge
 from userge.utils.exceptions import StopConversation
+
 
 @userge.on_cmd(
     "fstat",
@@ -32,30 +32,23 @@ async def f_stat(message: Message):
             f"Fetching fstat of user <a href='tg://user?id={user_id}'><b>{user_name}</b></a>..."
         )
     except BaseException:
-        await message.edit(
-            f"Fetching fstat of user <b>{user_}</b>...\nWARNING: User not found in your database, checking Rose's database."
-        )
         user_name = user_
         user_id = user_
-    bot_ = "MissRose_bot"
     msgs = []
-    ERROR_MSG = "For your kind information, you blocked @missrose_bot, Unblock it"
     try:
-        async with userge.conversation(bot_) as conv:
+        async with userge.conversation("MissRose_bot") as conv:
             try:
                 await conv.send_message(f"!fstat {user_id}")
             except YouBlockedUser:
-                await message.err(f"**{ERROR_MSG}**", del_in=5)
+                await message.err(f"**You blocked @missrose_bot, Unblock it**", del_in=5)
                 return
             msgs.append(await conv.get_response(mark_read=True))
             msgs.append(await conv.get_response(mark_read=True))
-            msgs.append(await conv.get_response(timeout=3, mark_read=True))
+            msgs.append(await conv.get_response(timeout=1, mark_read=True))
     except StopConversation:
         pass
-    fail = "Could not find a user"
     for msg in msgs:
-        if msg.text.startswith(fail):
+        if msg.text.startswith("Could not find a user"):
             await message.edit(f"User <b>{user_name}</b> (<code>{user_id}</code>) could not be found in @MissRose_bot's database.")
         else:
-            await message.edit(f"`{msg.text}`")
-    
+            await message.edit(f"{msg.text}")

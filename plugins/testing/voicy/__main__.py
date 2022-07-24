@@ -4,6 +4,7 @@
 #
 # ==
 
+import asyncio
 from pyrogram import filters
 from pyrogram.errors import YouBlockedUser
 
@@ -51,8 +52,11 @@ async def f_stat(message: Message):
             
             edited = filters.create(edited_filter)
             msgs.append(await conv.get_response(mark_read=True))
+            await asyncio.sleep(1)
             msgs.append(await conv.get_response(mark_read=True))
+            await asyncio.sleep(1)
             msgs.append(await conv.get_response(mark_read=True))
+            await asyncio.sleep(1)
             msgs.append(await conv.get_response(timeout=3, mark_read=True))
     except StopConversation:
         pass

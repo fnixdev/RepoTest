@@ -4,6 +4,7 @@
 #
 # ==
 
+from pyrogram import filters
 from pyrogram.errors import YouBlockedUser
 
 from userge import Message, userge
@@ -14,7 +15,7 @@ async def edited_filter(_, __, m: Message):
     return bool(m.edit_date)
 
 
-edited = create(edited_filter)
+edited = filters.create(edited_filter)
 """Filter edited messages."""
 
 

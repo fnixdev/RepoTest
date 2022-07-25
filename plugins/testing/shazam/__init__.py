@@ -4,4 +4,4 @@
 #
 # ==
 
-""" voicy module """
+""" shazam module """

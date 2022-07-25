@@ -11,7 +11,6 @@ import os
 from shazamio import Shazam
 
 from userge import userge, Message, config
-from userge.utils import progress
 
 
 shazam = Shazam()
@@ -19,11 +18,12 @@ shazam = Shazam()
 
 @userge.on_cmd(
     "whichsong", about={
-        'header': "discover song name",
-        'usage': "{tr}whichisong [reply song]"},
+        'header': "Use shazam to find the name and artist of a song",
+        'usage': "{tr}whichisong [reply audio]"},
     allow_channels=False
 )
 async def which_song(message: Message):
+    """ discover song using shazam"""
     replied = message.reply_to_message
     if not replied or not replied.audio:
         await message.edit("<code>Reply audio needed.</code>")
@@ -50,3 +50,4 @@ async def which_song(message: Message):
     except Exception:
         os.remove(file)
         return await message.err("<code>Failed to get sound data.</code>")
+    os.remove(file)

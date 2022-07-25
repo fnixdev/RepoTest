@@ -18,12 +18,12 @@ shazam = Shazam()
 
 
 @userge.on_cmd(
-    "whichisong", about={
+    "whichsong", about={
         'header': "discover song name",
         'usage': "{tr}whichisong [reply song]"},
     allow_channels=False
 )
-async def whichi_song(message: Message):
+async def which_song(message: Message):
     replied = message.reply_to_message
     if not replied or not replied.audio:
         await message.edit("<code>Reply audio needed.</code>")
@@ -42,9 +42,11 @@ async def whichi_song(message: Message):
         return await message.err("<code>Failed to get sound data.</code>")
     song = res["track"]
     out = f"<b>Song Recognised!\n\n{song['title']}</b>\n<i>- {song['subtitle']}</i>"
-    if song["images"]:
+    try:
         await message.delete()
         await message.reply_photo(photo=song["images"]["coverart"], caption=out)
-    else:
+    except KeyError:
         await message.edit(out)
-    os.remove(file)
+    except Exception:
+        os.remove(file)
+        return await message.err("<code>Failed to get sound data.</code>")

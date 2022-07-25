@@ -37,5 +37,6 @@ async def whichi_song(message: Message):
         res = await shazam.recognize_song(file)
         await message.edit(res)
     except Exception as e:
+        await message.reply(e)
         os.remove(file)
         return await message.err("Failed to get sound data.")

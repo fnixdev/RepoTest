@@ -24,9 +24,9 @@ shazam = Shazam()
     allow_channels=False
 )
 async def whichi_song(message: Message):
-    reply = message.reply_to_message
-    if not reply.audio:
-        await message.err("<code>Reply audio needed.</code>")
+    replied = message.reply_to_message
+    if not replied or not replied.audio:
+        await message.edit("<code>Reply audio needed.</code>")
         return
     await message.edit("<code>downloading audio..</code>")
     file = await message.client.download_media(

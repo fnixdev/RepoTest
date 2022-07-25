@@ -28,14 +28,14 @@ async def whichi_song(message: Message):
     if not reply.audio:
         await message.err("Reply audio needed.")
         return
+    await message.edit("Downloading audio..")
     file = await message.client.download_media(
                 message=message.reply_to_message,
-                file_name=config.Dynamic.DOWN_PATH,
-                progress=progress
+                file_name=config.Dynamic.DOWN_PATH
             )
     try:
         res = await shazam.recognize_song(file)
-        await message.reply(res)
+        await message.edit(res)
     except Exception as e:
         os.remove(file)
         return await message.err("Failed to get sound data.")

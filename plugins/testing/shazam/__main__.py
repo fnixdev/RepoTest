@@ -42,7 +42,7 @@ async def whichi_song(message: Message):
         return await message.err("<code>Failed to get sound data.</code>")
     song = res["track"]
     out = f"<b>Song Recognised!\n\n{song['title']}</b>\n<i>- {song['subtitle']}</i>"
-    if song["images"]["coverart"]:
+    if song["images"]:
         await message.delete()
         await message.reply_photo(photo=song["images"]["coverart"], caption=out)
     else:

@@ -16,8 +16,8 @@ from userge.utils import runcmd
 
 @userge.on_cmd(
     "extractaudio", about={
-        'header': "extract audio from video",
-        'usage': "{tr}extractaud [reply video]"},
+        'header': "extract audio from a video",
+        'usage': "{tr}extractaudio [reply video]"},
     allow_channels=False
 )
 async def extract_audio(message: Message):
@@ -88,7 +88,7 @@ async def make_voice(message: Message):
                 voice="voice.opus",
                 caption="<b>Voice created by @HilzuUB</b>",
                 duration=dur
-            ) 
+            )
         except Exception:
             await message.edit("<code>Fail.</code>")
         os.remove("voice.opus")

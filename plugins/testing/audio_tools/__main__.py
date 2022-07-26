@@ -61,7 +61,7 @@ async def extract_audio(message: Message):
         'usage': "{tr}makevoice [reply video or audio]"},
     allow_channels=False
 )
-async def extract_audio(message: Message):
+async def make_voice(message: Message):
     """ make voice note """
     replied = message.reply_to_message
     if not replied:
@@ -73,7 +73,7 @@ async def extract_audio(message: Message):
             message=replied,
             file_name=config.Dynamic.DOWN_PATH
         )
-        dur = replied.video.duration
+        dur = replied.video.duration or replied.audio.duration
         try:
             await message.edit("<code>trying make audio</code>")
             cmd = f"ffmpeg -i '{file}' -map 0:a -codec:a libopus -b:a 100k -vbr on voice.opus"

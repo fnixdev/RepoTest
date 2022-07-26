@@ -28,7 +28,7 @@ async def extract_audio(message: Message):
     if replied.media == MessageMediaType.VIDEO:
         await message.edit("<code>downloading video..</code>")
         file = await message.client.download_media(
-            message=replied.video.file_id,
+            message=replied,
             file_name=config.Dynamic.DOWN_PATH
         )
         dur = replied.video.duration

@@ -73,7 +73,10 @@ async def make_voice(message: Message):
             message=replied,
             file_name=config.Dynamic.DOWN_PATH
         )
-        dur = replied.video.duration or replied.audio.duration
+        if replied.audio:
+            dur = replied.audio.duration
+        else:
+            dur = replied.video.duration
         try:
             await message.edit("<code>trying make audio</code>")
             cmd = f"ffmpeg -i '{file}' -map 0:a -codec:a libopus -b:a 100k -vbr on voice.opus"

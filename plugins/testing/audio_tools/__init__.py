@@ -4,4 +4,4 @@
 #
 # ==
 
-""" base module """
+""" audio tools module """

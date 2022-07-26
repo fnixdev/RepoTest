@@ -32,10 +32,10 @@ async def extract_audio(message: Message):
             file_name=config.Dynamic.DOWN_PATH
         )
         dur = replied.video.duration
-        out_file = file + ".aac"
+        out_file = file + ".mp3"
         try:
             await message.edit("<code>trying extract audio</code>")
-            cmd = f"ffmpeg -i {file} -vn -acodec copy {out_file}"
+            cmd = f"ffmpeg -i {file} -q:a 0 -map a {out_file}"
             await runcmd(cmd)
             await message.edit("<code>uploading audio...</code>")
             await message.delete()

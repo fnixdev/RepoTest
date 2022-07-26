@@ -37,7 +37,6 @@ async def extract_audio(message: Message):
             await message.edit("<code>trying extract audio</code>")
             cmd = f"ffmpeg -i {file} -vn -acodec copy {out_file}"
             await runcmd(cmd)
-            os.remove(file)
             await message.edit("<code>uploading audio...</code>")
             await message.delete()
             await message.client.send_audio(
@@ -45,12 +44,11 @@ async def extract_audio(message: Message):
                 audio=out_file,
                 caption="<b>Audio extracted by @HilzuUB</b>",
                 duration=dur
-            )
-            os.remove(out_file)
+            ) 
         except Exception:
-            os.remove(file)
             await message.edit("<code>Fail.</code>")
-            return
+        os.remove(out_file)
+        os.remove(file)
     else:
         await message.edit("<code>Reply video needed.</code>")
         return

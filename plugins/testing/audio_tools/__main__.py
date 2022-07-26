@@ -21,6 +21,7 @@ from userge.utils import runcmd
     allow_channels=False
 )
 async def extract_audio(message: Message):
+    """ extract audio """
     replied = message.reply_to_message
     if not replied:
         await message.edit("<code>Reply video needed.</code>")
@@ -61,6 +62,7 @@ async def extract_audio(message: Message):
     allow_channels=False
 )
 async def extract_audio(message: Message):
+    """ make voice note """
     replied = message.reply_to_message
     if not replied:
         await message.edit("<code>Reply audio or video needed.</code>")

@@ -52,3 +52,42 @@ async def extract_audio(message: Message):
     else:
         await message.edit("<code>Reply video needed.</code>")
         return
+
+
+@userge.on_cmd(
+    "makevoice", about={
+        'header': "convert audio/video in audio voice file",
+        'usage': "{tr}makevoice [reply video or audio]"},
+    allow_channels=False
+)
+async def extract_audio(message: Message):
+    replied = message.reply_to_message
+    if not replied:
+        await message.edit("<code>Reply audio or video needed.</code>")
+        return
+    if replied.media == MessageMediaType.VIDEO or MessageMediaType.AUDIO:
+        await message.edit("<code>downloading ...</code>")
+        file = await message.client.download_media(
+            message=replied,
+            file_name=config.Dynamic.DOWN_PATH
+        )
+        dur = replied.video.duration
+        try:
+            await message.edit("<code>trying make audio</code>")
+            cmd = f"ffmpeg -i '{file}' -map 0:a -codec:a libopus -b:a 100k -vbr on voice.opus"
+            await runcmd(cmd)
+            await message.edit("<code>uploading audio...</code>")
+            await message.delete()
+            await message.client.send_voice(
+                message.chat.id,
+                voice="voice.opus",
+                caption="<b>Voice created by @HilzuUB</b>",
+                duration=dur
+            ) 
+        except Exception:
+            await message.edit("<code>Fail.</code>")
+        os.remove("voice.opus")
+        os.remove(file)
+    else:
+        await message.edit("<code>Reply audio or video needed.</code>")
+        return

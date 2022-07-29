@@ -79,6 +79,6 @@ async def send_neko(message: Message, choice: str):
         resp = await get_response.json(API+choice)
     except Exception:
         return await message.edit("request error")
-    link = resp["results"]["url"]
-    capt = f'Source: <a href=\"{resp["results"]["source_url"]}\"> Here</a>'
+    link = resp["results"][0]["url"]
+    capt = f'Source: <a href=\"{resp["results"][0]["source_url"]}\"> Here</a>\nArtst: <a href=\"{resp["results"][0]["artist_href"]}\">{resp["results"][0]["artist_name"]}</a>'
     await message.reply(link, capt)

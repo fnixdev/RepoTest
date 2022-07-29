@@ -75,10 +75,7 @@ async def nekos_best(message: Message):
 
 
 async def send_neko(message: Message, choice: str):
-    try:
-        resp = requests.get(API+choice).json()
-    except Exception:
-        return await message.edit("request error")
+    resp = requests.get(API+choice).json()
     reply = message.reply_to_message
     reply_id = reply.id if reply else None
     x = resp["results"][0]

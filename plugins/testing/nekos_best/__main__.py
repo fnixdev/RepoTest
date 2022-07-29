@@ -83,7 +83,7 @@ async def send_neko(message: Message, choice: str):
     reply_id = reply.id if reply else None
     x = resp["results"][0]
     link = x["url"]
-    capt = f'<b>Artst:</b> <a href=\"{x["artist_href"]}\">{x["artist_name"]}</a>'
+    capt = f'**Artist:** [{x["artist_name"]}]({x["artist_href"]})'
     if link.endswith(".gif"):
         bool_unsave = not message.client.is_bot
         await message.client.send_animation(

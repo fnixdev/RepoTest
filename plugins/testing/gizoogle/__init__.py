@@ -4,4 +4,4 @@
 #
 # ==
 
-""" gizogle module """
+""" gizoogle module """

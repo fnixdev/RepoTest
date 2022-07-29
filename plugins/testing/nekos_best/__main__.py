@@ -49,7 +49,7 @@ CATEGORIES = [
     "punch",
     "shoot",
     "husbando",
-    "yeet",
+    "yeet"
 ]
 
 
@@ -58,7 +58,7 @@ CATEGORIES = [
     about={
         "header": "Get SFW stuff from nekos.best",
         "usage": "{tr}neko\n{tr}neko [Choice]",
-        "choice": CATEGORIES,
+        "Choice": CATEGORIES,
     },
 )
 async def nekos_best(message: Message):
@@ -76,6 +76,7 @@ async def nekos_best(message: Message):
     reply_id = reply.id if reply else None
     resp = requests.get(API+choice).json()
     link = resp["results"][0]["url"]
+    await message.delete()
     if link.endswith(".gif"):
         bool_unsave = not message.client.is_bot
         await message.client.send_animation(

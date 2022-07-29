@@ -7,9 +7,9 @@
 """ nekos module """
 
 import random
+import requests
 
 from userge import userge, Message
-from userge.utils import get_response
 
 API = "https://nekos.best/api/v2/"
 CATEGORIES = [
@@ -76,7 +76,7 @@ async def nekos_best(message: Message):
 
 async def send_neko(message: Message, choice: str):
     try:
-        resp = await get_response.json(API+choice)
+        resp = requests.get(API+choice).json()
     except Exception:
         return await message.edit("request error")
     reply = message.reply_to_message

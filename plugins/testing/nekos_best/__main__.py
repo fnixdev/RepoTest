@@ -79,7 +79,22 @@ async def send_neko(message: Message, choice: str):
         resp = await get_response.json(API+choice)
     except Exception:
         return await message.edit("request error")
+    reply = message.reply_to_message
+    reply_id = reply.id if reply else None
     x = resp["results"][0]
     link = x["url"]
-    capt = f'Source: <a href=\"{x["source_url"]}\"> Here</a>\nArtst: <a href=\"{x["artist_href"]}\">{x["artist_name"]}</a>'
+    capt = f'<b>Source:</b> <a href=\"{x["source_url"]}\"> Here</a>\n<b>Artst:</b> <a href=\"{x["artist_href"]}\">{x["artist_name"]}</a>'
+    if link.endswith(".gif"):
+        bool_unsave = not message.client.is_bot
+        await message.client.send_animation(
+            chat_id=message.chat.id,
+            animation=link,
+            unsave=bool_unsave,
+            reply_to_message_id=reply_id,
+        )
+    else:
+        await message.client.send_photo(
+            chat_id=message.chat.id, photo=link, reply_to_message_id=reply_id
+        )
+    
     await message.reply(link, "\n", capt)

@@ -74,7 +74,10 @@ async def nekos_best(message: Message):
         choice = random.choice(CATEGORIES)
     reply = message.reply_to_message
     reply_id = reply.id if reply else None
-    resp = requests.get(API+choice).json()
+    try:
+        resp = requests.get(API+choice).json()
+    except Exception:
+        return await message.edit("<code>Fail to get image.</code>")
     link = resp["results"][0]["url"]
     if not message.client.is_bot:
         await message.delete()

@@ -1,4 +1,4 @@
-## == Modules Userge by fnix
+# == Modules Userge by fnix
 #
 # = All copyrights to UsergeTeam
 #
@@ -63,38 +63,30 @@ CATEGORIES = [
 )
 async def nekos_best(message: Message):
     """ get sfw nekos """
-    choice = message.input_str
-    if choice:
-        lower_choice = str(choice).lower()
+    query = message.input_str
+    if query:
+        lower_choice = str(query).lower()
         if lower_choice in CATEGORIES:
-            await send_neko(message, lower_choice)
+            choice = query
         else:
             await message.err("<code>Invalid input..</code>")
     else:
-        await send_neko(message, random.choice(CATEGORIES))
-
-
-async def send_neko(message: Message, choice: str):
-    resp = requests.get(API+choice).json()
+        choice = random.choice(CATEGORIES)
     reply = message.reply_to_message
     reply_id = reply.id if reply else None
-    x = resp["results"][0]
-    link = x["url"]
-    art = x["artist_name"]
-    hart = x["artist_href"]
-    source = x["source_url"]
-    capt = f'**Artist:** [{art}]({hart})\n**Source** [Here]({source})'
+    resp = requests.get(API+choice).json()
+    link = resp["results"][0]["url"]
     if link.endswith(".gif"):
         bool_unsave = not message.client.is_bot
         await message.client.send_animation(
             chat_id=message.chat.id,
             animation=link,
-            caption=capt,
             unsave=bool_unsave,
             reply_to_message_id=reply_id,
         )
     else:
         await message.client.send_photo(
-            chat_id=message.chat.id, photo=link, caption=capt, reply_to_message_id=reply_id
+            chat_id=message.chat.id,
+            photo=link,
+            reply_to_message_id=reply_id
         )
-    

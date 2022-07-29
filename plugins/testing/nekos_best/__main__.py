@@ -58,7 +58,7 @@ CATEGORIES = [
     about={
         "header": "Get SFW stuff from nekos.best",
         "usage": "{tr}neko\n{tr}neko [Choice]",
-        "Choice": CATEGORIES,
+        "✾ Choice": CATEGORIES,
     },
 )
 async def nekos_best(message: Message):

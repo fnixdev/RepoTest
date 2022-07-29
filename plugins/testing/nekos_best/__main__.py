@@ -7,9 +7,9 @@
 """ nekos module """
 
 import random
-import requests
 
 from userge import userge, Message
+from userge.utils import get_response
 
 API = "https://nekos.best/api/v2/"
 CATEGORIES = [
@@ -75,7 +75,7 @@ async def nekos_best(message: Message):
     reply = message.reply_to_message
     reply_id = reply.id if reply else None
     try:
-        resp = requests.get(API+choice).json()
+        resp = await get_response.json(API+choice)
     except Exception:
         return await message.edit("<code>Fail to get image.</code>")
     link = resp["results"][0]["url"]

@@ -76,7 +76,8 @@ async def nekos_best(message: Message):
     reply_id = reply.id if reply else None
     resp = requests.get(API+choice).json()
     link = resp["results"][0]["url"]
-    await message.delete()
+    if not message.client.is_bot:
+        await message.delete()
     if link.endswith(".gif"):
         bool_unsave = not message.client.is_bot
         await message.client.send_animation(

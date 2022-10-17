@@ -20,7 +20,7 @@ NO_PM_LOG = get_collection("NO_PM_LOG")
 PM_LOGGER_CACHE = {}
 
 
-@userge.on_start()
+@userge.on_start
 async def _init() -> None:
     data = await SAVED_SETTINGS.find_one({"_id": "PM_LOGGING"})
     if data:

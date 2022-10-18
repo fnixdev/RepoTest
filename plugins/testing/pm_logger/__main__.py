@@ -77,7 +77,7 @@ async def pm_logger(_, message: Message):
         PM_LOGGER_CACHE[u_id] = {
             "name": u_name,
             "msg_count": 1,
-            "logger_mgs_id": logger_msg_count.message.id
+            "logger_mgs_id": logger_msg_count.id
         }
 
     elif len(PM_LOGGER_CACHE) == 1:

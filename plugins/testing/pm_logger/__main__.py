@@ -116,7 +116,7 @@ async def pm_logger(_, message: Message):
     else:
         PM_LOGGER_CACHE.clear()
     try:
-        await userge.forward(u_id ,PM_GROUP, message.id ,disable_notification=True)
+        await userge.forward_messages(u_id ,PM_GROUP, message.id ,disable_notification=True)
     except FloodWait as e:
         await asyncio.sleep(e.x)
     except MessageIdInvalid:

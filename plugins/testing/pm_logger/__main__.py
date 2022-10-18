@@ -19,7 +19,11 @@ ALLOWED_COLLECTION = get_collection("PM_PERMIT")
 NO_PM_LOG = get_collection("NO_PM_LOG")
 
 PM_LOGGER_CACHE = {}
-PM_GROUP = os.environ.get("PM_LOG_GROUP_ID") if config.Dynamic.PM_LOG_GROUP_ID else config.LOG_CHANNEL_ID
+
+if config.Dynamic.PM_LOG_GROUP_ID:
+    PM_GROUP = config.Dynamic.PM_LOG_GROUP_ID
+else:
+    PM_GROUP = config.LOG_CHANNEL_ID
 
 
 @userge.on_start

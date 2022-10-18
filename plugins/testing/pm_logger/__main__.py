@@ -4,6 +4,7 @@
 #
 # ==
 
+import os
 import html
 import asyncio
 
@@ -18,6 +19,7 @@ ALLOWED_COLLECTION = get_collection("PM_PERMIT")
 NO_PM_LOG = get_collection("NO_PM_LOG")
 
 PM_LOGGER_CACHE = {}
+PM_GROUP = os.environ.get("PM_LOG_GROUP_ID") if config.Dynamic.PM_LOG_GROUP_ID else config.LOG_CHANNEL_ID
 
 
 @userge.on_start
@@ -36,7 +38,7 @@ async def _init() -> None:
     allow_channels=False)
 async def pm_logger_(message: Message):
     """ enable / disable PM Logging """
-    if not config.Dynamic.PM_LOG_GROUP_ID:
+    if not PM_GROUP:
         return await message.edit("Make a group and add it's ID in ENV \n\n add var `PM_LOG_GROUP_ID`", del_in=5)
     if config.Dynamic.PM_LOGGING:
         config.Dynamic.PM_LOGGING = False
@@ -68,7 +70,7 @@ async def pm_logger(_, message: Message):
 
     if len(PM_LOGGER_CACHE) == 0:
         logger_msg_count = await userge.send_message(
-            config.Dynamic.PM_LOG_GROUP_ID,
+            PM_GROUP,
             new_pm_logger.format(u_id, mention_html(u_id, u_name)),
             disable_notification=True
         )
@@ -87,7 +89,7 @@ async def pm_logger(_, message: Message):
             edit_pm_logger = pm_logger_msg + " <code>{}</code> messages"
             try:
                 await userge.edit_message_text(
-                    config.Dynamic.PM_LOG_GROUP_ID,
+                    PM_GROUP,
                     PM_LOGGER_CACHE[u_info_id]["logger_msg_id"],
                     edit_pm_logger.format(u_info_id, u_mention, PM_LOGGER_CACHE[u_info_id]["msg_count"])
                 )
@@ -96,7 +98,7 @@ async def pm_logger(_, message: Message):
             PM_LOGGER_CACHE.clear()
             try:
                 logger_msg_count = await userge.send_message(
-                    config.Dynamic.PM_LOG_GROUP_ID,
+                    PM_GROUP,
                     new_pm_logger.format(u_id, mention_html(u_id, u_name)),
                     disable_notification=True
                 )
@@ -110,7 +112,7 @@ async def pm_logger(_, message: Message):
     else:
         PM_LOGGER_CACHE.clear()
     try:
-        await message.forward(config.Dynamic.PM_LOG_GROUP_ID, disable_notification=True)
+        await message.forward(PM_GROUP, disable_notification=True)
     except FloodWait as e:
         await asyncio.sleep(e.x)
     except MessageIdInvalid:
